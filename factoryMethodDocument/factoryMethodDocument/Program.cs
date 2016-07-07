@@ -12,13 +12,12 @@ namespace FactoryMethodDocument
     {
         static void Main(string[] args)
         {
-            TextApplication myApplication = new TextApplication();
-            Document document = myApplication.createDocument();
+            KoncreteApplication myApplication = new KoncreteApplication();
+            Document document = myApplication.createDocument(ApplicationType.TEXT);
             document.open();
             document.close();
 
-            GraphicApplication myApplication2 = new GraphicApplication();
-            document = myApplication2.createDocument();
+            document = myApplication.createDocument(ApplicationType.GRAPHIC);
             document.open();
             document.close();
 
@@ -60,27 +59,35 @@ public class GraphicDocument : Document
 public abstract class Application
 {
     private List<Document> docs = new List<Document>();
-    public void newDocument()
+    public void newDocument(ApplicationType applicationType)
     {
-        Document doc = createDocument();
+        Document doc = createDocument(applicationType);
         // Framework managt die Dokumente
         docs.Add(doc);
         doc.open();
     }
     //...
-    public abstract Document createDocument(); // Fabrikmethode
+    public abstract Document createDocument(ApplicationType applicationType); // Fabrikmethode
 }
-public class TextApplication : Application
+public class KoncreteApplication : Application
 {
-    public override Document createDocument()
+    public override Document createDocument(ApplicationType applicationType)
     {
-        return new TextDocument();
+        switch (applicationType)
+        {
+            case ApplicationType.TEXT:
+                return new TextDocument();
+            case ApplicationType.GRAPHIC:
+                return new GraphicDocument();
+            default:
+                return null;
+        }
     }
 }
-public class GraphicApplication : Application
+
+//Aufzählungstyp (Integerkonstanten wg. Komfort)
+public enum ApplicationType
 {
-    public override Document createDocument()
-    {
-        return new GraphicDocument();
-    }
+    TEXT,
+    GRAPHIC
 }
