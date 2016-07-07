@@ -16,6 +16,12 @@ namespace FactoryMethodDocument
             Document document = myApplication.createDocument();
             document.open();
             document.close();
+
+            GraphicApplication myApplication2 = new GraphicApplication();
+            document = myApplication2.createDocument();
+            document.open();
+            document.close();
+
             Console.ReadKey();
         }
     }
@@ -38,6 +44,18 @@ public class TextDocument : Document
         Console.WriteLine("Schliesse Textdatei");
     }
 }
+public class GraphicDocument : Document
+{
+    // Implementierung abstrakter Methoden
+    public override void open()
+    {
+        Console.WriteLine("Oeffne Graphikdatei");
+    }
+    public override void close()
+    {
+        Console.WriteLine("Schliesse Graphikdatei");
+    }
+}
 
 public abstract class Application
 {
@@ -57,5 +75,12 @@ public class TextApplication : Application
     public override Document createDocument()
     {
         return new TextDocument();
+    }
+}
+public class GraphicApplication : Application
+{
+    public override Document createDocument()
+    {
+        return new GraphicDocument();
     }
 }
